@@ -1,5 +1,6 @@
 package entidades;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -26,6 +27,8 @@ public class Cliente {
 	private Situacao trabalho;
 	public enum Situacao {TRABALHANDO, FINALIZADO, CANCELADO, EXCLUÍDO}
 	
+	private LocalDateTime dataCadastro;
+	
 	public class animal{
 		
 	}
@@ -37,6 +40,7 @@ public class Cliente {
 		Arrays.fill(this.servicos, NAO_INICIALIZADO); //=> Define toda a array como não incializada
 		this.trabalho = Situacao.TRABALHANDO; 		 //=> Define a situação do cliente como trabalhando
 		this.status = StatusPagamento.PENDENTE;		//=> Deixa o pagamento como pendente
+		this.dataCadastro = LocalDateTime.now();
 	}
 	
 	//===> MÉTODOS
@@ -95,4 +99,8 @@ public class Cliente {
     public void setSituacao(Situacao stts) {
         this.trabalho = stts;
     }	
+    
+    public LocalDateTime getDataCadastro() {
+    	return dataCadastro;
+    }
 }

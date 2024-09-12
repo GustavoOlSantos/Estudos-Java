@@ -1,14 +1,18 @@
 package programa;
 
-import java.util.Scanner;
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import entidades.Cliente;
 import entidades.Servicos;
 
 public class SistemaVet {
+	
+	//=> Formato Global
+	public static DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
 
 	public static void main(String[] args) {
 
@@ -135,6 +139,7 @@ public class SistemaVet {
 						System.out.println(" ".repeat(15) +"Parcelas: " + cli[cont2].parcelaPagamento + "x");
 						System.out.println("Status Pagamento: " + cli[cont2].getStatusPagamento());
 						System.out.println("\nSituação do Cliente: " + cli[cont2].getSituacao());
+						System.out.println("\n\nData de Cadastro: " + cli[cont2].getDataCadastro().format(timeFormat));
 						System.out.println("\n\n");
 					}
 					break;
@@ -183,6 +188,11 @@ public class SistemaVet {
 
 
 	public static void menu() {
+		LocalDateTime data = LocalDateTime.now();
+		
+		System.out.println("Data: " + data.format(timeFormat));
+		
+		
 		System.out.println("========== SELECIONE ==========");
 		System.out.println("[1]: Cadastrar Novo Cliente");
 		System.out.println("[2]: Relatório Diário");

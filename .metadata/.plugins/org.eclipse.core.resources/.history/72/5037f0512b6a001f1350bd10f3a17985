@@ -1,0 +1,23 @@
+package program;
+
+import java.util.Scanner;
+import entities.Pessoa;
+
+public class Alturas {
+
+	public static void main(String[] args) {
+	
+		//=> Decvlarações
+		Scanner in = new Scanner(System.in);
+		int qtd = 0;
+		
+		//=> Obtém a quantidade de pessoas a serem cadastradas
+		System.out.print("Quantas Pessoas Serão Cadastradas?\nR: ");
+		qtd = in.nextInt();
+		in.nextLine();
+		
+		Pessoa[] P = new Pessoa[qtd];
+
+	}
+
+}

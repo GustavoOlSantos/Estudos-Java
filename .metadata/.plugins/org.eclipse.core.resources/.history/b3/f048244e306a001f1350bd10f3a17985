@@ -1,0 +1,14 @@
+package program;
+
+import java.util.Scanner;
+import entities.Alunos;
+
+public class Pensionato {
+
+	public static void main(String[] args) {
+		// Declarações
+		Scanner in = new Scanner(Syustem.in);
+
+	}
+
+}

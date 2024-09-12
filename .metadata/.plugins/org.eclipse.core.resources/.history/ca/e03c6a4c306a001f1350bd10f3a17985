@@ -1,0 +1,13 @@
+package program;
+
+import java.util.Scanner;
+import entities.Alunos;
+
+public class Pensionato {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
