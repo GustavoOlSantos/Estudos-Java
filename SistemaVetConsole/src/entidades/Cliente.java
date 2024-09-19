@@ -2,20 +2,23 @@ package entidades;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Scanner;
 import java.util.UUID;
+
+import entidades.Animal.AnimalTipo;
 
 public class Cliente {
 	
 	private int id;
 	
-	public String nome;
-	public String cpf;
-	public String telefone;
+	private String nome;
+	private String cpf;
+	private String telefone;
 	
-	public int[] servicos = new int[8];
+	//public int[] servicos = new int[8];
 	private int NAO_INICIALIZADO;
 	
-	private double orcamento;
+	private double orcamentoTotal;
 	
 	private FormaPagamento formaPagamento; 
 	public enum FormaPagamento {DEBITO, CREDITO, DINHEIRO, PIX};
@@ -29,29 +32,78 @@ public class Cliente {
 	
 	private LocalDateTime dataCadastro;
 	
-	public class animal{
-		
-	}
+	public Animal[] animal;
+	public int qtdAnimal;
+	
 	
 	//=> Constrututor 
 	public Cliente() {
 		this.id = UUID.randomUUID().hashCode();		   //=> Gera um ID para o cliente
 		this.NAO_INICIALIZADO = -1;
-		Arrays.fill(this.servicos, NAO_INICIALIZADO); //=> Define toda a array como não incializada
+
+		for(Animal each : animal) {
+			Arrays.fill(each.servicos, NAO_INICIALIZADO); //=> Define toda a array como não incializada
+		}
+		
 		this.trabalho = Situacao.TRABALHANDO; 		 //=> Define a situação do cliente como trabalhando
 		this.status = StatusPagamento.PENDENTE;		//=> Deixa o pagamento como pendente
+		this.dataCadastro = LocalDateTime.now();
+	}
+
+	public Cliente(String nome, String cpf, String num, int qtd) {
+		this.nome = nome;
+		this.cpf = cpf;
+		this.telefone = num;
+		this.qtdAnimal = qtd;
+		
+		animal = new Animal[qtd];
+		
+		this.id = UUID.randomUUID().hashCode();		   //=> Gera um ID para o cliente
+		this.NAO_INICIALIZADO = -1;
+		
+		this.trabalho = Situacao.TRABALHANDO; 		 	 //=> Define a situação do cliente como trabalhando
+		this.status = StatusPagamento.PENDENTE;		    //=> Deixa o pagamento como pendente
 		this.dataCadastro = LocalDateTime.now();
 	}
 	
 	//===> MÉTODOS
 	
-	//======> Orçamento
-	public double getOrcamento(){
-		return this.orcamento;
+	//======> Nome
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 	
+	//======> CPF
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+	
+	//======> Telefone
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+	
+	//======> Orçamento
+	public double getOrcamento(){
+		return this.orcamentoTotal;
+	}
+
 	public void setOrcamento(double value){
-		orcamento += value;
+		orcamentoTotal += value;
 	}
 	
 	//======> Id
@@ -59,22 +111,25 @@ public class Cliente {
 		return this.id;
 	}
 	
-	//======> Serviços
-		public void getServicos(Servicos[] serv) {
-			for(Integer servicoSelecionado : this.servicos) {
-				if(servicoSelecionado >= 0 && servicoSelecionado < serv.length && servicoSelecionado != NAO_INICIALIZADO) {
-					System.out.println(serv[servicoSelecionado].nome + " " + "-".repeat(50 - serv[servicoSelecionado].nome.length()) + " R$" + serv[servicoSelecionado].preco);
-				}
-			}
-		}
-	
 	//======> Forma de Pigment
     public FormaPagamento getFormaPagamento() {
         return formaPagamento;
     }
     
-    public void setFormaPagamento(FormaPagamento formaPagamento) {
-        this.formaPagamento = formaPagamento;
+    public void setFormaPagamento(int formaPg, Scanner in) {
+    	
+    	switch(formaPg) {
+			case 0: this.formaPagamento = FormaPagamento.DEBITO; break;
+			case 1: 
+				this.formaPagamento = FormaPagamento.CREDITO; 
+				
+				System.out.print("\n\nSerá parcelado em quantas vezes?(Limite 6)\nR:");
+				this.parcelaPagamento = in.nextInt();
+				in.nextLine();
+			break;
+			case 2: this.formaPagamento = FormaPagamento.DINHEIRO; break;
+			case 3: this.formaPagamento = FormaPagamento.PIX; break;
+    	}
         
         //=> Define o Valor da Parcela como 1
         if(formaPagamento == FormaPagamento.DEBITO || formaPagamento == FormaPagamento.DINHEIRO || formaPagamento == FormaPagamento.PIX) {
