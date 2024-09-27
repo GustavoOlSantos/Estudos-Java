@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-        <listEntry value="/SistemaVetConsole/src/programa/SistemaVet.java"/>
+        <listEntry value="/SistemaVetConsole/src/application/SistemaVet.java"/>
     </listAttribute>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
         <listEntry value="1"/>
     </listAttribute>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>
-    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="programa.SistemaVet"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="application.SistemaVet"/>
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="SistemaVetConsole"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="SistemaVetConsole"/>
 </launchConfiguration>
