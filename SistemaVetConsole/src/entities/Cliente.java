@@ -71,8 +71,8 @@ public class Cliente {
 		
 		
 		this.nome 		= nome;
-		this.cpf 		= CpfCnpjMask.aplicarMascara(cpf);
-		this.telefone 	= TelefoneMask.aplicarMascara(num);
+		this.cpf 		= CpfCnpjMask.Mask(cpf);
+		this.telefone 	= TelefoneMask.Mask(num);
 		this.qtdAnimal 	= qtd;
 		
 		animal = new Animal[qtd];
@@ -103,7 +103,7 @@ public class Cliente {
 	}
 
 	public void setCpf(String cpf) {
-		this.cpf = CpfCnpjMask.aplicarMascara(cpf);
+		this.cpf = CpfCnpjMask.Mask(cpf);
 	}
 	
 	//======> Telefone
@@ -113,7 +113,7 @@ public class Cliente {
 	}
 
 	public void setTelefone(String telefone) throws DomainException{
-		this.telefone = TelefoneMask.aplicarMascara(telefone);
+		this.telefone = TelefoneMask.Mask(telefone);
 	}
 	
 	//======> Orçamento
