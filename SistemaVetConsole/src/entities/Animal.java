@@ -1,10 +1,13 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import exceptions.DomainException;
 
-public class Animal {
+public class Animal implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private String nome;
 	private AnimalSexo sexo;
@@ -16,7 +19,9 @@ public class Animal {
 	public int[] servicos = new int[8];
 	private double orcamento;
 	
-	public Animal() {}
+	public Animal() {
+		Arrays.fill(this.servicos, -1); //=> Define toda a array como não incializada
+	}
 	
 	public Animal(String nome, int tipo, int sexo) throws DomainException{
 		this.nome = nome;
@@ -45,6 +50,19 @@ public class Animal {
 		return sexo;
 	}
 	
+	public int getIntSexo() {
+		
+		int sexo = -1;
+		
+		switch(this.sexo){
+			case AnimalSexo.MACHO: 		  sexo = 0; break;
+			case AnimalSexo.FÊMEA: 		  sexo = 1; break;
+			case AnimalSexo.HERMAFRODITA: sexo = 2; break;
+		}
+		
+		return sexo;
+	}
+	
 	public void setSexo(int sexo) throws DomainException {
 		switch(sexo) {
 			case 0: this.sexo = AnimalSexo.MACHO; 		 break;
@@ -70,6 +88,24 @@ public class Animal {
 	
 	public AnimalTipo getTipo() {
 		return tipo;
+	}
+	
+	public int getIntTipo() {
+		
+		int type = -1;
+		
+		switch(tipo) {
+			case AnimalTipo.GATO: 			 	type = 0;	break;
+			case AnimalTipo.CACHORRO: 		 	type = 1; 	break;
+			case AnimalTipo.AVE:				type = 2; 	break;
+			case AnimalTipo.COELHO: 			type = 3;	break;
+			case AnimalTipo.TARTARUGA: 		 	type = 4; 	break;
+			case AnimalTipo.COBRA: 			 	type = 5;	break;
+			case AnimalTipo.LAGARTO: 		   	type = 6; 	break;
+			case AnimalTipo.OUTROS_SILVESTRES: 	type = 7; 	break;
+		}
+		
+		return type;
 	}
 	
 	//======> Orçamento

@@ -1,5 +1,7 @@
 package entities;
 
+import java.io.Serializable;
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -14,8 +16,10 @@ import services.TelefoneMask;
 import exceptions.DomainException;
 
 
-public class Cliente {
+public class Cliente implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	private int id;
 	
 	private String nome;
@@ -44,16 +48,14 @@ public class Cliente {
 	
 	//=> Constrututor 
 	public Cliente() {
-		this.id = UUID.randomUUID().hashCode();		   //=> Gera um ID para o cliente
-		this.NAO_INICIALIZADO = -1;
+		//this.id = UUID.randomUUID().hashCode();		   //=> Gera um ID para o cliente
+		//this.NAO_INICIALIZADO = -1;
 
-		for(Animal each : animal) {
-			Arrays.fill(each.servicos, NAO_INICIALIZADO); //=> Define toda a array como não incializada
-		}
+	
 		
-		this.trabalho = Situacao.TRABALHANDO; 		 //=> Define a situação do cliente como trabalhando
-		this.status = StatusPagamento.PENDENTE;		//=> Deixa o pagamento como pendente
-		this.dataCadastro = LocalDateTime.now();
+		//this.trabalho = Situacao.TRABALHANDO; 		 //=> Define a situação do cliente como trabalhando
+		//this.status = StatusPagamento.PENDENTE;		//=> Deixa o pagamento como pendente
+		//this.dataCadastro = LocalDateTime.now();
 	}
 
 	public Cliente(String nome, String cpf, String num, int qtd) throws DomainException {
@@ -72,12 +74,12 @@ public class Cliente {
 		
 		this.nome 		= nome;
 		this.cpf 		= CpfCnpjMask.Mask(cpf);
-		this.telefone 	= TelefoneMask.Mask(num);
+		this.telefone 	= TelefoneMask.Mask(TelefoneMask.Unmask(num));
 		this.qtdAnimal 	= qtd;
 		
 		animal = new Animal[qtd];
 		
-		this.id = UUID.randomUUID().hashCode();		   //=> Gera um ID para o cliente
+		//this.id = UUID.randomUUID().hashCode();		   //=> Gera um ID para o cliente
 		this.NAO_INICIALIZADO = -1;
 		
 		this.trabalho = Situacao.TRABALHANDO; 		 	 //=> Define a situação do cliente como trabalhando
@@ -86,6 +88,15 @@ public class Cliente {
 	}
 	
 	//===> MÉTODOS
+	
+	//======> Id
+	public int getId() {
+		return this.id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 	//======> Nome
 	public String getNome() {
@@ -113,7 +124,7 @@ public class Cliente {
 	}
 
 	public void setTelefone(String telefone) throws DomainException{
-		this.telefone = TelefoneMask.Mask(telefone);
+		this.telefone = TelefoneMask.Mask(TelefoneMask.Unmask(telefone));
 	}
 	
 	//======> Orçamento
@@ -125,14 +136,22 @@ public class Cliente {
 		orcamentoTotal += value;
 	}
 	
-	//======> Id
-	public int getId() {
-		return this.id;
-	}
-	
-	//======> Forma de Pigment
+	//======> Forma de Pagamento
     public FormaPagamento getFormaPagamento() {
         return formaPagamento;
+    }
+    
+    public int getIntFormaPagamento(){
+    	int fpg = -1;
+    	
+        switch(formaPagamento) {
+        	case FormaPagamento.DEBITO: fpg = 0; break;
+        	case FormaPagamento.CREDITO: fpg = 1; break;
+        	case FormaPagamento.DINHEIRO: fpg = 2; break;
+        	case FormaPagamento.PIX: fpg = 3; break;
+        }
+        
+        return fpg;
     }
     
     public void setFormaPagamento(int formaPg, Scanner in) throws DomainException {
@@ -169,7 +188,18 @@ public class Cliente {
     	return status;
     }
     
-    public void setStatusPagamento(int stts) {
+    public int getIntStatusPagamento(){
+    	int spg = -1;
+    	
+    	switch(status) {
+	    	case StatusPagamento.PENDENTE: 	spg = 0; break;
+			case StatusPagamento.PAGO: 		spg = 1; break;
+    	}
+    	
+    	return spg;
+    }
+    
+    public void setStatusPagamento(int stts){
     	switch(stts) {
     		case 0:  this.status = StatusPagamento.PENDENTE; break;
     		case 1: this.status = StatusPagamento.PAGO; break;
@@ -181,6 +211,19 @@ public class Cliente {
         return trabalho;
     }
     
+    public int getIntSituacao() {
+    	int stt = -1;
+    	
+        switch(trabalho) {
+	        case Situacao.TRABALHANDO: stt = 0; break;
+			case Situacao.FINALIZADO: stt = 1; break;
+			case Situacao.CANCELADO: stt = 2; break;
+			case Situacao.EXCLUÍDO: stt = 3; break;
+        }
+        
+        return stt;
+    }
+    
     public void setSituacao(int stts) {
     	switch(stts) {
 		    case 0: this.trabalho = Situacao.TRABALHANDO; break;
@@ -189,6 +232,11 @@ public class Cliente {
 			case 3: this.trabalho = Situacao.EXCLUÍDO; break;
     	}
     }	
+    
+	public void setDataCadastro(LocalDateTime date) {
+		this.dataCadastro = date;
+		
+	}
     
     public LocalDateTime getDataCadastro() {
     	return dataCadastro;

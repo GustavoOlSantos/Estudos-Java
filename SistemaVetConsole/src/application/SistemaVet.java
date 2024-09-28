@@ -29,6 +29,8 @@ import db.DbIntegrityException;
 
 //=> Exceptions Imports
 import exceptions.DomainException;
+import interfaces.dao.ClienteDAO;
+import interfaces.dao.DaoFactory;
 
 public class SistemaVet {
 	
@@ -61,6 +63,7 @@ public class SistemaVet {
 		serv[8] = new Servicos(8, "Eutanásia", 300.00);
 		
 		Cliente[]  cli = new Cliente[MAX_CLIENTES];
+		ClienteDAO clienteDAO = DaoFactory.createClienteDao(in);
 		
 		//=> Lista de IDs Registrados
 		List<Integer> ids = new ArrayList<>();
@@ -177,7 +180,8 @@ public class SistemaVet {
 						in.nextLine();
 						
 						cli[cont].setFormaPagamento(formaPg, in);
-						
+						clienteDAO.insert(cli[cont]);
+					
 						cont++;
 						break;
 						
@@ -314,6 +318,18 @@ public class SistemaVet {
 						in.nextLine();
 						break;
 						
+					case "4":
+						
+						System.out.println("Insira um Id para buscar o cliente cadastrado: ");
+						int idBusca = in.nextInt();
+						in.nextLine();
+						
+						cli[cont] = clienteDAO.findById(idBusca);
+						ids.add(cli[cont].getId());
+						cont++;
+						
+						break;
+						
 					case "999":
 						int cont2 = 0;
 						int buscar;
@@ -384,6 +400,7 @@ public class SistemaVet {
 		System.out.println("[1]: Cadastrar Novo Cliente");
 		System.out.println("[2]: Editar Cliente");
 		System.out.println("[3]: Relatório Diário");
+		System.out.println("[4]: Teste findById");
 		System.out.println("[999]: Buscar Cliente");
 		System.out.println("[X]: Encerrar");
 		

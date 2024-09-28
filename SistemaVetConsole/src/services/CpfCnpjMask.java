@@ -14,13 +14,17 @@ public class CpfCnpjMask {
 		if (cpfCnpj.length() == 0) {
 			return "";
 		}
+		
 		if (isCnpj(cpfCnpj)) {
 			return cpfCnpj.replaceAll(REGEX_CNPJ, REPLACE_CNPJ);
-		} else if (isCpf(cpfCnpj)) {
+		} 
+		else if (isCpf(cpfCnpj)) {
 			return cpfCnpj.replaceAll(REGEX_CPF, REPLACE_CPF);
-		} else if (isCpf(cpfCnpj.substring(3))) {
+		} 
+		else if (isCpf(cpfCnpj.substring(3))) {
 			return cpfCnpj.substring(3).replaceAll(REGEX_CPF, REPLACE_CPF);
-		} else {
+		} 
+		else {
 			return cpfCnpj;
 		}
 	}
