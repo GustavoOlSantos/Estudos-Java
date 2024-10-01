@@ -3,6 +3,7 @@ package entities;
 import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.UUID;
@@ -284,5 +285,41 @@ public class Cliente implements Serializable {
 		}
     	
     	return objStr;
+    }
+    
+    public void printClienteSheet(Servicos[] serv, DateTimeFormatter timeFormat) {
+    	//System.out.println("id: " + this.getId());
+		System.out.println("Nome: " + this.getNome());
+		System.out.print("CPF: " + this.getCpf());
+		System.out.println(" ".repeat(5) + "Telefone: " + this.getTelefone());
+		
+		System.out.println("\n===========> Pets Cadastrados");
+		
+		for(Animal pet : this.animal) {
+			System.out.print("\nNome do pet: " + pet.getNome());
+			System.out.print(" ".repeat(5) + "Tipo: " + pet.getTipo());
+			
+			
+			System.out.println("\n\nServiços do pet:");
+			pet.printServicos(serv);
+			System.out.println(" ".repeat(34) + "Orçamento do pet: R$" + pet.getOrcamento());
+			
+			System.out.println("========================================================>");
+			
+		}
+		
+		
+		System.out.println("\n" + " ".repeat(34) + "Orçamento Total: R$" + this.getOrcamento());
+		System.out.print("Forma de Pagamento: " + this.getFormaPagamento());
+		
+		if(this.getFormaPagamento().toString() == "CREDITO") {
+			System.out.print(" ".repeat(8) +"Parcelas: " + this.parcelaPagamento + "x");
+		}
+		System.out.println("");
+		
+		System.out.println("Status Pagamento: " + this.getStatusPagamento());
+		System.out.println("\nSituação do Cliente: " + this.getSituacao());
+		System.out.println("\n\nData de Cadastro: " + this.getDataCadastro().format(timeFormat));
+		System.out.println("\n\n");
     }
 }
