@@ -15,6 +15,7 @@ import entities.Animal;
 import entities.Cliente;
 import entities.Servicos;
 
+import java.io.IOException;
 //=> SQL imports
 import java.sql.Connection;
 import java.sql.Statement;
@@ -63,6 +64,7 @@ public class SistemaVet {
 		serv[8] = new Servicos(8, "Eutanásia", 300.00);
 		
 		Cliente[]  cli = new Cliente[MAX_CLIENTES];
+		List<Cliente> cliList = new ArrayList();
 		ClienteDAO clienteDAO = DaoFactory.createClienteDao(in);
 		
 		//=> Lista de IDs Registrados
@@ -101,8 +103,6 @@ public class SistemaVet {
 						
 						//=> Criar Cliente
 						cli[cont] = new Cliente(nome, cpf, telefone, qtdAnimais);
-						int id = cli[cont].getId();
-						ids.add(id);
 						
 						for(int i = 0; i < qtdAnimais; i++) {
 							//=> Preencher Dados do Animal
@@ -181,94 +181,14 @@ public class SistemaVet {
 						
 						cli[cont].setFormaPagamento(formaPg, in);
 						clienteDAO.insert(cli[cont]);
+						int id = cli[cont].getId();
+						ids.add(id);
 					
 						cont++;
 						break;
 						
-					
-					//=> Editar cliente
-					case "2":
-						System.out.println("\n\n======= Selecione um cliente para editar ======= " );
-						
-						int i = 0, cod;
-						for(Integer idid : ids) {
-							//idid = ID DO CLIENTE
-							
-							System.out.printf("[%d]: %s \n", i, cli[i].toString());
-							i++;
-						}
-						
-						System.out.print("R: ");
-						cod = in.nextInt();
-						in.nextLine();
-						
-						System.out.println("Qual informação deseja Alterar?");
-						cli[cod].listaEdit();
-						
-						String var;
-						int val;
-						int editOp = in.nextInt();
-						in.nextLine();
-						
-						switch(editOp) {
-							case 0: 
-								System.out.print("Digite um novo nome: ");
-								var = in.nextLine();
-								cli[cod].setNome(var);
-								break;
-							case 1: 
-								System.out.print("Digite um novo cpf: ");
-								var = in.nextLine();
-								cli[cod].setCpf(var);
-								break;
-							case 2: 
-								System.out.print("Digite um novo telefone: ");
-								var = in.nextLine();
-								cli[cod].setTelefone(var);
-								break;
-							case 3: 
-								System.out.println("Alterar Forma de pagamento: ");
-								System.out.println("0: DÉBITO");
-								System.out.println("1: CRÉDITO");
-								System.out.println("2: DINHEIRO");
-								System.out.println("3: PIX");
-								System.out.print("R: ");
-								val = in.nextInt();
-								
-								cli[cod].setFormaPagamento(val, in);
-								break;
-							case 4: 
-								System.out.print("Insira quantas parcelas: ");
-								val = in.nextInt();
-								in.nextLine();
-								cli[cod].parcelaPagamento = val;
-								break;
-							case 5: 
-								System.out.println("Alterar Status do Pagamento: ");
-								System.out.println("0: PENDENTE");
-								System.out.println("1: PAGO");
-								System.out.print("R: ");								
-								val = in.nextInt();
-								
-								cli[cod].setStatusPagamento(val);
-								break;
-							case 6: 
-								System.out.println("Alterar Situação do cliente: ");
-								System.out.println("0: TRABALHANDO");
-								System.out.println("1: FINALIZADO");
-								System.out.println("2: CANCELADO");
-								System.out.println("3: EXCLUÍDO");
-								System.out.print("R: ");
-								val = in.nextInt();
-								
-								cli[cod].setSituacao(val);
-								break;
-						}
-
-						break;
-					
 					//=> EXIBIR TODOS OS CLIENTES
-					case "3":
+					case "2":
 						
 						if(cont == 0) {
 							throw new DomainException("Não há clientes cadastrados para mostrar.");
@@ -279,48 +199,17 @@ public class SistemaVet {
 						
 						for(int cont2 = 0; cont2 < cont; cont2++) {
 							
-							//System.out.println("id: " + cli[cont2].getId());
-							System.out.println("Nome: " + cli[cont2].getNome());
-							System.out.print("CPF: " + cli[cont2].getCpf());
-							System.out.println(" ".repeat(5) + "Telefone: " + cli[cont2].getTelefone());
-							
-							System.out.println("\n===========> Pets Cadastrados");
-							
-							for(Animal pet : cli[cont2].animal) {
-								System.out.print("\nNome do pet: " + pet.getNome());
-								System.out.print(" ".repeat(5) + "Tipo: " + pet.getTipo());
-								
-								
-								System.out.println("\n\nServiços do pet:");
-								pet.getServicos(serv);
-								System.out.println(" ".repeat(34) + "Orçamento do pet: R$" + pet.getOrcamento());
-								
-								System.out.println("=====>");
-								
-							}
-							
-							
-							System.out.println("\n" + " ".repeat(34) + "Orçamento Total: R$" + cli[cont2].getOrcamento());
-							System.out.print("Forma de Pagamento: " + cli[cont2].getFormaPagamento());
-							
-							if(cli[cont2].getFormaPagamento().toString() == "CREDITO") {
-								System.out.print(" ".repeat(8) +"Parcelas: " + cli[cont2].parcelaPagamento + "x");
-							}
-							System.out.println("");
-							
-							System.out.println("Status Pagamento: " + cli[cont2].getStatusPagamento());
-							System.out.println("\nSituação do Cliente: " + cli[cont2].getSituacao());
-							System.out.println("\n\nData de Cadastro: " + cli[cont2].getDataCadastro().format(timeFormat));
-							System.out.println("\n\n");
+							cli[cont2].printClienteSheet(serv, timeFormat);
+		
 						}
 						
 						System.out.println("\nPressione ENTER para continuar...");
 						in.nextLine();
 						break;
 						
-					case "4":
+					case "3":
 						
-						System.out.println("Insira um Id para buscar o cliente cadastrado: ");
+						System.out.println("Insira um Id para buscar o cliente: ");
 						int idBusca = in.nextInt();
 						in.nextLine();
 						
@@ -329,6 +218,134 @@ public class SistemaVet {
 						cont++;
 						
 						break;
+						
+					case "4":
+						
+						System.out.println("\nExibindo todos os clientes cadastrados...: ");
+						cliList = clienteDAO.findAll();
+						
+						for(Cliente client : cliList) {
+							System.out.printf("[%d] %s \n", client.getId(), client);
+						}
+						
+						break;
+					
+					case "5":
+						System.out.println("Informe um Id para excluir: ");
+						int idExcluir = in.nextInt();
+						in.nextLine();
+						
+						clienteDAO.deleteById(idExcluir);
+						System.out.println("Cliente Excluído.");
+						break;
+						
+					case "6":
+						System.out.println("Qual Cliente deseja atualizar? ");
+						
+						cliList = clienteDAO.findAll();
+						
+						for(Cliente client : cliList) {
+							System.out.printf("[%d] %s \n", client.getId(), client);
+						}
+						
+						System.out.print("R: ");
+						int buscaUpdate = in.nextInt();
+						in.nextLine();
+						
+						for(Cliente client : cliList) {
+							if(client.getId() != buscaUpdate) {
+								continue;
+							}
+							
+							System.out.println("Qual informação deseja Alterar?");
+							client.listaEdit();
+							
+							boolean flag = true;
+							
+							for(int ii = 0; flag != false; ii++) {
+								if(ii > 0) {
+									System.out.print("Deseja Alterar outra informação? (S/N): ");
+									String respInfo = in.nextLine();
+									
+									if(respInfo.equalsIgnoreCase("N")) {
+										flag = false;
+										continue;
+									}
+								}
+									
+								System.out.println("R: ");
+								String replaceVar;
+								int replaceVal;
+								int replaceEditOp = in.nextInt();
+								in.nextLine();
+								
+								switch(replaceEditOp) {
+									case 0: 
+										System.out.print("Digite um novo nome: ");
+										replaceVar = in.nextLine();
+										client.setNome(replaceVar);
+										break;
+									case 1: 
+										System.out.print("Digite um novo cpf: ");
+										replaceVar = in.nextLine();
+										client.setCpf(replaceVar);
+										break;
+									case 2: 
+										System.out.print("Digite um novo telefone: ");
+										replaceVar = in.nextLine();
+										client.setTelefone(replaceVar);
+										break;
+									case 3: 
+										System.out.println("Alterar Forma de pagamento: ");
+										System.out.println("0: DÉBITO");
+										System.out.println("1: CRÉDITO");
+										System.out.println("2: DINHEIRO");
+										System.out.println("3: PIX");
+										System.out.print("R: ");
+										replaceVal = in.nextInt();
+										in.nextLine();
+										
+										client.setFormaPagamento(replaceVal, in);
+										break;
+									case 4: 
+										System.out.print("Insira quantas parcelas: ");
+										replaceVal = in.nextInt();
+										in.nextLine();
+										
+										client.parcelaPagamento = replaceVal;
+										break;
+									case 5: 
+										System.out.println("Alterar Status do Pagamento: ");
+										System.out.println("0: PENDENTE");
+										System.out.println("1: PAGO");
+										System.out.print("R: ");								
+										replaceVal = in.nextInt();
+										in.nextLine();
+										
+										client.setStatusPagamento(replaceVal);
+										break;
+									case 6: 
+										System.out.println("Alterar Situação do cliente: ");
+										System.out.println("0: TRABALHANDO");
+										System.out.println("1: FINALIZADO");
+										System.out.println("2: CANCELADO");
+										System.out.println("3: EXCLUÍDO");
+										System.out.print("R: ");
+										replaceVal = in.nextInt();
+										in.nextLine();
+										
+										client.setSituacao(replaceVal);
+										break;
+								}
+							}
+							
+							clienteDAO.update(client);
+							System.out.println("Dados do Atualizados.");
+							
+						}
+						
+						
+					break;
 						
 					case "999":
 						int cont2 = 0;
@@ -371,6 +388,10 @@ public class SistemaVet {
 			System.out.println("\nErro: " + e.getMessage());
 		}
 		
+		catch(IOException e) {
+			System.out.println("Erro: " + e.getMessage());
+		}
+		
 		catch(InputMismatchException e) {
 			System.out.println("\nErro: Entrada de Dados inválida.");
 		}
@@ -398,10 +419,14 @@ public class SistemaVet {
 		
 		System.out.println("========== SELECIONE ==========");
 		System.out.println("[1]: Cadastrar Novo Cliente");
-		System.out.println("[2]: Editar Cliente");
-		System.out.println("[3]: Relatório Diário");
-		System.out.println("[4]: Teste findById");
-		System.out.println("[999]: Buscar Cliente");
+		System.out.println("[2]: Relatório Diário");
+		
+		//============================================>
+		
+		System.out.println("[3]: Ler cliente específico");
+		System.out.println("[4]: Relatório Clientes");
+		System.out.println("[5]: Apagar Cliente");
+		System.out.println("[6]: Atualizar/Editar Cliente");
 		System.out.println("[X]: Encerrar");
 		
 		System.out.print("Resposta: ");
