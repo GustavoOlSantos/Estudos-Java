@@ -16,7 +16,7 @@ public class Animal implements Serializable {
 	private AnimalTipo tipo; 
 	public enum AnimalTipo {GATO, CACHORRO, AVE, COELHO, TARTARUGA, COBRA, LAGARTO, OUTROS_SILVESTRES};
 	
-	public int[] servicos = new int[8];
+	public int[] servicos = new int[9];
 	private double orcamento;
 	
 	public Animal() {
@@ -118,12 +118,16 @@ public class Animal implements Serializable {
 	}
 	
 	//======> Serviços
-	public void getServicos(Servicos[] serv) {
+	public void printServicos(Servicos[] serv) {
 		for(Integer servicoSelecionado : this.servicos) {
 			if(servicoSelecionado >= 0 && servicoSelecionado < serv.length && servicoSelecionado != -1) {
 				System.out.println(serv[servicoSelecionado].nome + " " + "-".repeat(50 - serv[servicoSelecionado].nome.length()) + " R$" + serv[servicoSelecionado].preco);
 			}
 		}
+	}
+	
+	public int[] getServicos() {
+		return servicos;
 	}
 }
 
